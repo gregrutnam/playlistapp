@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { loginUrl, getTokenFromUrl } from "../src/spotify";
 import SpotifyWebApi from "spotify-web-api-js";
 import MakePlaylist from "./MakePlaylist";
+import AddSongs from "./AddSongs";
 
 const spotify = new SpotifyWebApi();
 
@@ -100,6 +101,12 @@ function App() {
       options
     );
   }
+   
+  async function searchTracks(){
+    let query = "Milk%20It"
+    let results = await spotify.searchTracks(query)
+    console.log(results)
+  }
 
   return (
     <div className="App">
@@ -118,7 +125,9 @@ function App() {
         />
       ) : (
         //If they've made a playlist
-        <button onClick={addTracks}>Add some songs</button>
+        <AddSongs searchTracks={searchTracks} addTracks={addTracks} />
+        
+
       )}
     </div>
   );
