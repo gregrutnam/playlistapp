@@ -14,6 +14,8 @@ function App() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [setting, setSetting] = useState(true);
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState([])
 
   useEffect(() => {
     console.log("playlist name", name);
@@ -27,6 +29,13 @@ function App() {
     console.log("playlist setting", setting);
   }, [setting]);
 
+  useEffect(() => {
+    console.log("search query", query);
+  }, [query])
+
+  useEffect(() => {
+    console.log("results", results);
+  }, [results])
   /**
    * This function takes in user input and sets the "name" state
    */
@@ -89,23 +98,27 @@ function App() {
   /**
    * This function makes a POST request to Spotify that adds songs to a playlist given its id
    */
-  async function addTracks() {
+  async function addTracks(event) {
+    console.log("HELLOOOOO", event)
     const options = { position: 0 };
-    const uris = [
-      "spotify:track:0Pie5DFAHHxpkONFUsAI6s",
-      "spotify:track:0aMqNFBj9KtPTD3c3tByRT",
+    const uri = [
+      event.target.id
     ];
     const tracksAddedToPlaylist = await spotify.addTracksToPlaylist(
       playlist.id,
-      uris,
+      uri,
       options
     );
   }
+
+  function handleQuery(event) {
+    setQuery(event.target.value)
+  }
    
   async function searchTracks(){
-    let query = "Milk%20It"
-    let results = await spotify.searchTracks(query)
-    console.log(results)
+    let result = await spotify.searchTracks(query)
+    console.log(result)
+    setResults(result.tracks.items)
   }
 
   return (
@@ -125,9 +138,7 @@ function App() {
         />
       ) : (
         //If they've made a playlist
-        <AddSongs searchTracks={searchTracks} addTracks={addTracks} />
-        
-
+        <AddSongs searchTracks={searchTracks} addTracks={addTracks} handleQuery={handleQuery} results={results}/>
       )}
     </div>
   );

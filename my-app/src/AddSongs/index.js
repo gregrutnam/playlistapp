@@ -1,9 +1,8 @@
-export default function AddSongs({searchTracks}){
-console.log("YOOOO", searchTracks)
+export default function AddSongs({searchTracks, addTracks, handleQuery, results}){
     return <div>
-        <input placeholder="Search for songs"></input>
+        <input onChange={handleQuery} placeholder="Search for songs"></input>
         <button onClick={searchTracks}>Search</button>
-        <button>Add Song</button>
+        {results.length > 0 ? results.map(result => <><p>{result.name} - {result.artists[0].name}</p> <button id={result.uri} onClick={addTracks}>Add Song</button></>) : null}
         </div>
 }
 
