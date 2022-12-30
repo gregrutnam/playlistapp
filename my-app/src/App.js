@@ -121,7 +121,12 @@ function App() {
     setResults(result.tracks.items)
   }
 
-  return (
+  async function getPlaylist (){
+    let result = await spotify.getPlaylist(playlist.id)
+    console.log(result)
+  }
+
+ return (
     <div className="App">
       {!spotifyToken ? (
         //If someone hasn't signed in (If there isn't a spotify token):
@@ -138,7 +143,7 @@ function App() {
         />
       ) : (
         //If they've made a playlist
-        <AddSongs searchTracks={searchTracks} addTracks={addTracks} handleQuery={handleQuery} results={results}/>
+        <AddSongs searchTracks={searchTracks} addTracks={addTracks} handleQuery={handleQuery} results={results} playlist={playlist}/>
       )}
     </div>
   );

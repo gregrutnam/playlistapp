@@ -1,4 +1,9 @@
-export default function AddSongs({searchTracks, addTracks, handleQuery, results}){
+import {useEffect} from "react";
+
+
+
+export default function AddSongs({searchTracks, addTracks, handleQuery, results, playlist}){
+    useEffect(()=>{console.log("this is the playlist in addsongs", playlist)},[playlist])
     return <div>
         <input onChange={handleQuery} placeholder="Search for songs"></input>
         <button onClick={searchTracks}>Search</button>
