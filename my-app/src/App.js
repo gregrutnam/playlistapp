@@ -109,7 +109,6 @@ function App() {
       uri,
       options
     );
-
     const result = await spotify.getPlaylist(playlist.id)
     setPlaylist(result)
   }
@@ -124,10 +123,7 @@ function App() {
     setResults(result.tracks.items)
   }
 
-  async function getPlaylist (){
-    let result = await spotify.getPlaylist(playlist.id)
-    console.log(result)
-  }
+ 
 
  return (
     <div className="App">
