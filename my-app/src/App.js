@@ -109,6 +109,9 @@ function App() {
       uri,
       options
     );
+
+    const result = await spotify.getPlaylist(playlist.id)
+    setPlaylist(result)
   }
 
   function handleQuery(event) {
