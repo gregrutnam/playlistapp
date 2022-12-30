@@ -109,6 +109,9 @@ function App() {
       uri,
       options
     );
+    let result = await spotify.getPlaylist(playlist.id)
+    setPlaylist(result)
+    
   }
 
   function handleQuery(event) {
@@ -121,10 +124,7 @@ function App() {
     setResults(result.tracks.items)
   }
 
-  async function getPlaylist (){
-    let result = await spotify.getPlaylist(playlist.id)
-    console.log(result)
-  }
+ 
 
  return (
     <div className="App">
