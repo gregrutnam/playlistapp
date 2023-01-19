@@ -7,6 +7,7 @@ import MakePlaylist from './components/MakePlaylist';
 import AddSongs from './components/AddSongs';
 import Playlists from './components/Playlists';
 import Root from './components/Root/root';
+import About from './components/About';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -14,7 +15,22 @@ const router = createBrowserRouter([
     {
       path: "/",
       element: <Root />,
+      children: [
+        {
+          path: "about",
+          element: <About/>
+        },
+        {
+          path: "make-playlist",
+          element: <MakePlaylist />,
+        },
+        {
+          path: "add-songs",
+          element: <AddSongs />,
+        },
+      ]
     },
+
     {
       path: "callback",
       element: <Root />,
@@ -30,6 +46,10 @@ const router = createBrowserRouter([
         {
           path: "playlists",
           element: <Playlists />,
+        },
+        {
+          path: "about",
+          element: <About/>
         }
       ]
     },

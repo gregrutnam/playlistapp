@@ -11,3 +11,104 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.root-container {
+  display: flex;
+  padding: 20px;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Nanum Pen Script';
+}
+
+h1 {
+  font-family: 'Nanum Pen Script';
+  font-size: 40px;
+}
+
+a {
+  color: black;
+  font-family: 'Indie Flower';
+  text-decoration: none;
+  font-size: 20px;
+}
+
+a:hover {
+  color: blue;
+  text-decoration: underline;
+}
+
+.header-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+nav {
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+}
+
+.add-songs-container {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  width: 90%;
+}
+
+.add-songs-results {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.add-song {
+  display: flex;
+  align-items: center;
+}
+
+.add-songs-info {
+  display: flex;
+  height: 64px;
+  width: 80%;
+  flex-direction: column;
+}
+
+.add-songs-info p {
+  font-size: 12px;
+  text-align: left;
+  margin-left: 15px;
+}
+
+.add-songs-search {
+  display: flex;
+  border: 1px dashed #3D3A33;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  width: 40%;
+}
+
+.add-songs-search > button {
+  width: 40%;
+  font-family: 'Indie Flower';
+  text-decoration: none;
+  font-size: 15px;
+}
+
+.add-songs-playlist {
+  display: flex;
+  flex-direction: column;
+  border: 1px dashed #3D3A33;
+  align-items: center;
+  padding: 20px;
+  width: 40%;
+} 
+
+.add-songs-playlist button {
+  width: 40%;
+}
+
+.add-songs-playlist > button > a {
+  font-size: 15px;
+}

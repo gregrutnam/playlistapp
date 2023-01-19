@@ -132,7 +132,7 @@ export default function Root() {
         }
 
         async function deleteTrack(event) {
-                if (window.confirm("Are you sure you want to remove this track?")) {
+                if (window.confirm(`Are you sure you want to remove ${event.target.name}?`)) {
                         let result = await spotify.removeTracksFromPlaylist(event.target.id, [event.target.className])
                         let updatedPlaylist = await spotify.getPlaylist(playlist.id)
                         setPlaylist(updatedPlaylist)
@@ -143,11 +143,14 @@ export default function Root() {
                 console.log(user)
         }, [user])
 
-        return <div>
+        return <div className="root-container">
+                <h1>Cyber-Mix</h1>
                 {user ? <>
                         <Header />
                         <p>Logged in as {user.display_name}</p>
-                </> : <a href={loginUrl} id="login-button"> Sign in with Spotify! </a>}
+                        </> : 
+                        <a href={loginUrl} id="login-button"> Sign in with Spotify! </a>
+                }
                 <Outlet context={[
                         { spotifyToken: spotifyToken }, 
                         { playlist: playlist }, 

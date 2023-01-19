@@ -12,7 +12,7 @@ export default function AddSongs() {
 
     return spotifyToken ? <div className="add-songs-container">
         <div className="add-songs-search">
-            <h1>Add some songs</h1>
+            <h2>Add some songs</h2>
             <input 
                 onChange={context[13].handleQuery} 
                 placeholder="Search for songs">
@@ -41,14 +41,15 @@ export default function AddSongs() {
             </div>
         </div>
         {playlist ? 
-            <div className="add-songs-playlist">
-                <h1>{playlist.name}</h1>
-                <h2>{playlist.description}</h2>
+            <div className="add-songs-playlist">             
+                <h2>{playlist.name}</h2>
+                <h3>{playlist.description}</h3>
                 {playlist.tracks.items.map(element => 
                     <p>{element.track.name} - {element.track.artists[0].name}
                         <button 
                             id={playlist.id} 
-                            className={element.track.uri} 
+                            className={element.track.uri}
+                            name={`${element.track.name} by ${element.track.artists[0].name}`}
                             onClick={context[12].deleteTrack}>Remove song
                         </button>
                     </p>)}
