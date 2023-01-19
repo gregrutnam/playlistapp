@@ -1,9 +1,12 @@
 import "./App.css";
 import { useEffect, useState } from "react";
-import { loginUrl, getTokenFromUrl } from "../src/spotify";
+import { loginUrl, getTokenFromUrl } from "../../spotify";
 import SpotifyWebApi from "spotify-web-api-js";
-import MakePlaylist from "./MakePlaylist";
-import AddSongs from "./AddSongs";
+import MakePlaylist from "../MakePlaylist";
+import AddSongs from "../AddSongs";
+import Playlists from "../Playlists";
+import Header from "../Header";
+import { Link } from "react-router-dom";
 
 const spotify = new SpotifyWebApi();
 
@@ -16,26 +19,9 @@ function App() {
   const [setting, setSetting] = useState(true);
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([])
+  const [playlistIds, setPlaylistIds] = useState([])
+  const [mixes, setMixes] = useState([])
 
-  useEffect(() => {
-    console.log("playlist name", name);
-  }, [name]);
-
-  useEffect(() => {
-    console.log("playlist description", description);
-  }, [description]);
-
-  useEffect(() => {
-    console.log("playlist setting", setting);
-  }, [setting]);
-
-  useEffect(() => {
-    console.log("search query", query);
-  }, [query])
-
-  useEffect(() => {
-    console.log("results", results);
-  }, [results])
   /**
    * This function takes in user input and sets the "name" state
    */
@@ -54,7 +40,7 @@ function App() {
    * This function takes in user input and sets the public / private "setting" state
    */
   function playlistSetting(event) {
-    if (event.target.value === "Private"){
+    if (event.target.value === "Private") {
       setSetting(false)
     }
     else {
@@ -66,10 +52,8 @@ function App() {
    * This function authenticates the user and sets "token" to the authentication token that we receive
    */
   useEffect(() => {
-    console.log("This is what we derived from the URL: ", getTokenFromUrl());
     const _spotifyToken = getTokenFromUrl().access_token;
     window.location.hash = "";
-    console.log("THIS IS OUR SPOTIFY TOKEN DEUCES ", _spotifyToken);
     if (_spotifyToken) {
       setSpotifyToken(_spotifyToken);
       spotify.setAccessToken(_spotifyToken);
@@ -92,19 +76,32 @@ function App() {
       public: false,
     };
     let playlistVariable = await spotify.createPlaylist(userId, data);
-    setPlaylist(playlistVariable);
+    setPlaylist(playlistVariable)
+    await postPlaylist(playlistVariable.id);
+  }
+
+  async function postPlaylist(id) {
+    const response = await fetch('http://localhost:3001/api/playlist',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          id: id,
+        })
+      })
+    const data = await response.json();
+    console.log(data.payload)
   }
 
   /**
    * This function makes a POST request to Spotify that adds songs to a playlist given its id
    */
   async function addTracks(event) {
-    console.log("HELLOOOOO", event)
     const options = { position: 0 };
-    const uri = [
-      event.target.id
-    ];
-    const tracksAddedToPlaylist = await spotify.addTracksToPlaylist(
+    const uri = [event.target.id];
+    await spotify.addTracksToPlaylist(
       playlist.id,
       uri,
       options
@@ -116,22 +113,49 @@ function App() {
   function handleQuery(event) {
     setQuery(event.target.value)
   }
-   
-  async function searchTracks(){
-    let result = await spotify.searchTracks(query)
-    console.log(result)
+
+  async function searchTracks() {
+    const options = { limit: 50 }
+    let result = await spotify.searchTracks(query, options)
     setResults(result.tracks.items)
   }
 
- 
+  async function deleteTrack(event) {
+    if (window.confirm("Are you sure you want to remove this track?")) {
+      let result = await spotify.removeTracksFromPlaylist(event.target.id, [event.target.className])
+      let updatedPlaylist = await spotify.getPlaylist(playlist.id)
+      setPlaylist(updatedPlaylist)
+    }
+  }
 
- return (
+  useEffect(() => {
+    getPlaylists()
+  }, [])
+
+  async function getPlaylists() {
+    const response = await fetch('http://localhost:3001/api/playlist')
+    const data = await response.json();
+    const ids = await data.payload.map(el => el.id)
+    setPlaylistIds(ids)
+    console.log(ids)
+  }
+
+  useEffect(() => {
+    async function getMixes(){
+      const mixArr = []
+      for (let i = 0; i < playlistIds.length; i++) {
+        const item = await spotify.getPlaylist(playlistIds[i]);
+        mixArr.push(item)
+      }
+      setMixes(mixArr)
+    } getMixes()
+  }, [playlistIds])
+
+  return (
     <div className="App">
       {!spotifyToken ? (
         //If someone hasn't signed in (If there isn't a spotify token):
-        <a href={loginUrl} id="signInButton">
-          Sign in with Spotify!
-        </a>
+        <a href={loginUrl} id="login-button"> Sign in with Spotify! </a>
       ) : !playlist ? (
         //Else, we don't need a log-in button
         <MakePlaylist
@@ -142,8 +166,16 @@ function App() {
         />
       ) : (
         //If they've made a playlist
-        <AddSongs searchTracks={searchTracks} addTracks={addTracks} handleQuery={handleQuery} results={results} playlist={playlist}/>
+        <AddSongs
+          searchTracks={searchTracks}
+          addTracks={addTracks}
+          deleteTrack={deleteTrack}
+          handleQuery={handleQuery}
+          results={results}
+          playlist={playlist}
+        />
       )}
+      <Playlists mixes={mixes}/>
     </div>
   );
 }

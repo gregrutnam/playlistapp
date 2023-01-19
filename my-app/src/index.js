@@ -1,13 +1,43 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
+import MakePlaylist from './components/MakePlaylist';
+import AddSongs from './components/AddSongs';
+import Playlists from './components/Playlists';
+import Root from './components/Root/root';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
+const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <Root />,
+    },
+    {
+      path: "callback",
+      element: <Root />,
+      children: [
+        {
+          path: "make-playlist",
+          element: <MakePlaylist />,
+        },
+        {
+          path: "add-songs",
+          element: <AddSongs />,
+        },
+        {
+          path: "playlists",
+          element: <Playlists />,
+        }
+      ]
+    },
+  ])
+
 root.render(
   <React.StrictMode>
-    <App />
+    <RouterProvider router={router} />
   </React.StrictMode>
 );
 
