@@ -3,22 +3,19 @@ import { useOutletContext } from "react-router-dom";
 
 export default function AddSongs() {
     const context = useOutletContext();
-    const spotifyToken = context[0].spotifyToken
-    const results = context[3].results;
-    const playlist = context[1].playlist;
-
-    useEffect(() => { console.log("this is the playlist in addsongs", playlist) }, [playlist])
-    console.log("results", results)
+    const spotifyToken = context.spotifyToken
+    const results = context.results;
+    const playlist = context.playlist;
 
     return spotifyToken ? <div className="add-songs-container">
         <div className="add-songs-search">
             <h2>Add some songs</h2>
             <input 
-                onChange={context[13].handleQuery} 
+                onChange={context.handleQuery} 
                 placeholder="Search for songs">
             </input>
             <button 
-                onClick={context[11].searchTracks}>Search
+                onClick={context.searchTracks}>Search
             </button>
             <div className="add-songs-results">
                 {results.length > 0 ? 
@@ -34,7 +31,7 @@ export default function AddSongs() {
                                     </div>
                                 <button 
                                     id={result.uri} 
-                                    onClick={context[10].addTracks}>Add Song
+                                    onClick={context.addTracks}>Add Song
                                 </button>
                             </div>
                     ) : null}
@@ -50,7 +47,7 @@ export default function AddSongs() {
                             id={playlist.id} 
                             className={element.track.uri}
                             name={`${element.track.name} by ${element.track.artists[0].name}`}
-                            onClick={context[12].deleteTrack}>Remove song
+                            onClick={context.deleteTrack}>Remove song
                         </button>
                     </p>)}
                     <button>
