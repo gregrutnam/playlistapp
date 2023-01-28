@@ -112,3 +112,32 @@ nav {
 .add-songs-playlist > button > a {
   font-size: 15px;
 }
+
+.access-user-container {
+  display: flex;
+  height: 100px;
+  padding: 20px;
+  gap: 10px;
+}
+
+.access-user-names {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.added-access-user {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  border: 1px solid lightgray;
+  height: 15px;
+  width: min-content;
+  padding: 5px;
+  border-radius: 10px;
+}
+
+.added-access-user > p:hover {
+  color: lightgray;
+  cursor: pointer;
+}

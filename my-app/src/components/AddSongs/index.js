@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useOutletContext } from "react-router-dom";
+import Track from "../Track";
 
 export default function AddSongs() {
     const context = useOutletContext();
@@ -19,21 +20,21 @@ export default function AddSongs() {
             </button>
             <div className="add-songs-results">
                 {results.length > 0 ? 
-                    results.map(
-                        result => 
-                            <div className="add-song">
-                                <img src={result.album.images[2].url}></img>
-                                    <div className="add-songs-info">
-                                        <p>{result.name} - {result.artists[0].name} 
-                                            <br></br>
-                                            {result.album.name}
-                                        </p>
-                                    </div>
-                                <button 
-                                    id={result.uri} 
-                                    onClick={context.addTracks}>Add Song
-                                </button>
-                            </div>
+                    results.map(result => 
+                        <Track image={result.album.images[2].url} name={result.name} artist={result.artists[0].name} album={result.album.name} id={result.uri} buttonFunction={context.addTracks} buttonText="Add Song"/>
+                            // <div className="add-song">
+                            //     <img src={result.album.images[2].url}></img>
+                            //         <div className="add-songs-info">
+                            //             <p>{result.name} - {result.artists[0].name} 
+                            //                 <br></br>
+                            //                 {result.album.name}
+                            //             </p>
+                            //         </div>
+                            //     <button 
+                            //         id={result.uri} 
+                            //         onClick={context.addTracks}>Add Song
+                            //     </button>
+                            // </div>
                     ) : null}
             </div>
         </div>

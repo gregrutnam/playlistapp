@@ -4,6 +4,8 @@ import { useOutletContext } from "react-router-dom";
 
 export default function MakePlaylist() {
     const [invalidCredentials, setInvalidCredentials] = useState(false)
+    const [accessUserAdded, setAccessUserAdded] = useState(false);
+
     const context = useOutletContext();
 
     useEffect(() => {
@@ -24,7 +26,16 @@ return spotifyToken ? <div>
         <input onBlur={context.playlistDescription}></input>
         <p>Share with</p>
         {invalidCredentials ? <Message/> : null}
-        <input onBlur={context.playlistAccess} placeholder="Enter a spotify username"></input>
+        {context.playlistAccessUser ? <div className="access-user-container">
+            <div className="access-user-names">
+                <a href={context.playlistAccessUser.external_urls.spotify}>{context.playlistAccessUser.display_name}</a>
+                <p>{context.playlistAccessUser.id}</p>
+                <button onClick={(event) => {context.playlistAccess(event); context.resetAccessUser()}} id={context.playlistAccessUser.id}>Add</button>
+            </div>
+        {context.playlistAccessUser.images.length > 0 ? <img src={context.playlistAccessUser.images[0].url}></img> : null}</div> : null}
+        {context.playlistSettings.access.length > 0 ? context.playlistSettings.access.map(user => <div className="added-access-user">{user}<p onClick={context.removeAccessUser} id={user}>X</p></div>) : null}
+        <input onBlur={context.getPlaylistAccessInput} placeholder="Enter a spotify username"></input>
+        <button onClick={context.validateUser}>Search</button>
         <p>Select a setting</p>
         <select onChange={context.playlistSetting}>
         <option>Public</option>

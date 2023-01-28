@@ -6,8 +6,9 @@ import reportWebVitals from './reportWebVitals';
 import MakePlaylist from './components/MakePlaylist';
 import AddSongs from './components/AddSongs';
 import Playlists from './components/Playlists';
-import Root from './components/Root/root';
+import Root, { loader as rootLoader } from './components/Root/root';
 import About from './components/About';
+import Playlist, {loader as playlistLoader} from './components/Playlist';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -15,10 +16,20 @@ const router = createBrowserRouter([
     {
       path: "/",
       element: <Root />,
+      loader: rootLoader,
       children: [
         {
           path: "about",
           element: <About/>
+        },
+        {
+          path: "playlists",
+          element: <Playlists />,
+        },
+        {
+          path: "playlists/:playlistId",
+          element: <Playlist/>,
+          loader: playlistLoader
         },
         {
           path: "make-playlist",
@@ -46,6 +57,11 @@ const router = createBrowserRouter([
         {
           path: "playlists",
           element: <Playlists />,
+        },
+        {
+          path: "playlists/:playlistId",
+          element: <Playlist/>,
+          loader: playlistLoader
         },
         {
           path: "about",
