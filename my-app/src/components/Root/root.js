@@ -54,16 +54,15 @@ const [playlistSettings, setPlaylistSettings] = useState({ name: "", description
 	}
 
 	function playlistAccess(event) {
-		setPlaylistSettings({...playlistSettings, access: [event.target.id]})
+		setPlaylistSettings({...playlistSettings, access: [...playlistSettings.access, event.target.id]})
 	}
 
 	useEffect(() => {
-		console.log(playlistAccessUser)
-	}, [playlistAccessUser])
+		console.log(playlistSettings)
+	}, [playlistSettings])
 
 	function validateUser() {
 		if (playlistAccessInput.length > 0) {
-			console.log(true)
 			spotify.getUser(`${playlistAccessInput}`).then((response) => {
 				console.log(response)
 				if (response.display_name) {
@@ -71,11 +70,10 @@ const [playlistSettings, setPlaylistSettings] = useState({ name: "", description
 					console.log(response)
 					setIsValidUser(true)
 					setPlaylistAccessUser(response)
-				}
-				else {
+				}}).catch((err) => {
+					console.log(err.status)
 					setIsValidUser(false)
-				}
-			})
+				})
 		}
 	}
 
@@ -156,6 +154,6 @@ const [playlistSettings, setPlaylistSettings] = useState({ name: "", description
 			</> :
 					<a href={loginUrl} id="login-button"> Sign in with Spotify! </a>
 			}
-			<Outlet context={{spotifyToken: spotifyToken, playlist: playlist, user: user, results: results, playlistSettings: playlistSettings, playlistName: playlistName, playlistDescription: playlistDescription, playlistSetting: playlistSetting, makePlaylist: makePlaylist, postPlaylist: postPlaylist, addTracks: addTracks, searchTracks: searchTracks, deleteTrack: deleteTrack, handleQuery: handleQuery, playlistAccess: playlistAccess, isValidUser: isValidUser, validateUser: validateUser, playlistAccessUser: playlistAccessUser, getPlaylistAccessInput: getPlaylistAccessInput, resetAccessUser: resetAccessUser, removeAccessUser: removeAccessUser}} />
+			<Outlet context={{spotifyToken: spotifyToken, playlist: playlist, user: user, results: results, playlistSettings: playlistSettings, playlistName: playlistName, playlistDescription: playlistDescription, playlistSetting: playlistSetting, makePlaylist: makePlaylist, postPlaylist: postPlaylist, addTracks: addTracks, searchTracks: searchTracks, deleteTrack: deleteTrack, handleQuery: handleQuery, playlistAccess: playlistAccess, isValidUser: isValidUser, validateUser: validateUser, playlistAccessUser: playlistAccessUser, getPlaylistAccessInput: getPlaylistAccessInput, playlistAccessInput: playlistAccessInput, resetAccessUser: resetAccessUser, removeAccessUser: removeAccessUser}} />
 	</div>
 }
