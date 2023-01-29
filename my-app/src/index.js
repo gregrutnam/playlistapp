@@ -4,11 +4,11 @@ import './index.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
 import MakePlaylist from './components/MakePlaylist';
-import AddSongs from './components/AddSongs';
 import Playlists from './components/Playlists';
 import Root, { loader as rootLoader } from './components/Root/root';
 import About from './components/About';
 import Playlist, {loader as playlistLoader} from './components/Playlist';
+import AddSongsPage from './components/AddSongsPage';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -37,7 +37,7 @@ const router = createBrowserRouter([
         },
         {
           path: "add-songs",
-          element: <AddSongs />,
+          element: <AddSongsPage />,
         },
       ]
     },
@@ -52,7 +52,7 @@ const router = createBrowserRouter([
         },
         {
           path: "add-songs",
-          element: <AddSongs />,
+          element: <AddSongsPage />,
         },
         {
           path: "playlists",

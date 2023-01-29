@@ -1,4 +1,4 @@
-export default function Track({image, name, artist, album, id, buttonFunction, buttonText}) {
+export default function Track({image, name, artist, album, uri, playlist, buttonFunction, buttonText}) {
     return <div className="add-song">
         <img src={image}></img>
         <div className="add-songs-info">
@@ -8,8 +8,7 @@ export default function Track({image, name, artist, album, id, buttonFunction, b
             </p>
         </div>
         <button
-            id={id}
-            onClick={() => buttonFunction(id)}>{buttonText}
+            onClick={() => buttonFunction(uri, playlist.id)}>{buttonText}
         </button>
     </div>
 }

@@ -34,24 +34,31 @@ export const getTokenFromUrl = () =>{
         }, {});
 }
 
+export async function getSpotifyPlaylist(id){
+    spotify.setAccessToken(localStorage.getItem('spotifyToken'));
+    const spotifyPlaylist = await spotify.getPlaylist(id)
+    return spotifyPlaylist
+}
+
 /**
 * This function makes a POST request to Spotify's API that creates a playlist using the id of the user who's currently logged in and the playlist settings
 * @param userId string
 * @param playlistSettings name: string, description: string, public: boolean
 * @return The new playlist if playlistSettings.name, nothing otherwise
 */
+
 export async function makeSpotifyPlaylist(userId, playlistSettings) {
-    console.log("in spotify file", playlistSettings)
-   let data = {
+    spotify.setAccessToken(localStorage.getItem('spotifyToken'));
+    let data = {
        name: playlistSettings.name,
        description: playlistSettings.description,
        //DOESN'T WORK RIGHT NOW
        public: playlistSettings.settings,
-   };
-   if (playlistSettings.name.length > 0) {
+    };
+    if (playlistSettings.name.length > 0) {
        let playlistVariable = await spotify.createPlaylist(userId, data);
        return playlistVariable;
-   }
+    }
 }
 
 /** This function makes a PATCH request to Spotify's API that updates a playlist using its id 
@@ -60,12 +67,13 @@ export async function makeSpotifyPlaylist(userId, playlistSettings) {
  * @return The updated playlist
 */
 export async function addTrackSpotifyPlaylist(uri, playlistId) {
+    spotify.setAccessToken(localStorage.getItem('spotifyToken'));
     const options = { position: 0 };
     await spotify.addTracksToPlaylist(
         playlistId,
-        uri,
+        [uri],
         options
-    );
+    )
     const result = await spotify.getPlaylist(playlistId)
     return result;
 }
@@ -76,10 +84,20 @@ export async function addTrackSpotifyPlaylist(uri, playlistId) {
  * @param uri string
   */
  export async function deleteTrackSpotify(name, id, uri) {
+    spotify.setAccessToken(localStorage.getItem('spotifyToken'));
     if (window.confirm(`Are you sure you want to remove ${name}?`)) {
-        let result = await spotify.removeTracksFromPlaylist(
-            id, [uri])
+        await spotify.removeTracksFromPlaylist(id, [uri])
         let updatedPlaylist = await spotify.getPlaylist(id)
         return updatedPlaylist;
     }
+}
+
+/** Searches for tracks matching a given search term
+ * @param query string
+ */
+export async function searchTracksSpotify(query){
+    spotify.setAccessToken(localStorage.getItem('spotifyToken'));
+    const options = { limit: 50 }
+    let result = await spotify.searchTracks(query, options)
+    return result;
 }

@@ -2,14 +2,11 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import Access from "../Access";
+import AddSongs from "../AddSongs";
 
 export default function MakePlaylist() {
 
     const context = useOutletContext();
-
-    useEffect(() => {
-        console.log(context.isValidUser)
-    }, [context.isValidUser])
 
     function MakePlaylistButton() {
         return context.isValidUser ? <button onClick={context.makePlaylist}><Link to="../add-songs">Make playlist</Link></button> : <button><Link to={``}>Make playlist</Link></button>

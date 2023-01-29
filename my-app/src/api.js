@@ -12,9 +12,11 @@ export async function getPlaylists() {
  * @return The playlist
 */
 export async function getPlaylistById(id){
+    console.log(id)
     const response = await fetch(`http://localhost:3001/api/playlists/${id}`)
     const data = await response.json()
-    return data.payload[0]
+    console.log("helllooooo", data)
+    return data.payload
 }
 
 /** Add new playlist to database
@@ -45,17 +47,20 @@ export async function postPlaylist(playlist) {
 
 /** Update an existing playlist in the database
  * @param id integer
- * @param playlist playlist_id: string, name: string, link: string, created_by: string, tracks: string[], date: string, access: string[]
+ * @param playlist playlist_id: string, name: string, link: string, created_by: string, tracks: string[], date: string, access: string[]ß
  */
-export async function updatePlaylist(id, playlist) {
-    const playlistData = await getPlaylistById(id);
+export async function updatePlaylist(playlist) {
+    const playlistData = await getPlaylistById(playlist.id);
     const tracksArr = [...playlist.tracks.items.map(item => {
         const trackObj = {
-            artist: item.track.artists[0].name,
             id: item.track.id,
             name: item.track.name,
+            artist: item.track.artists[0].name,
             album: item.track.album.name,
-            image: item.track.album.images[2].url
+            image: item.track.album.images[2].url,
+            comment: "",
+            author: "",
+            date: "",
         }
         return trackObj
     })]
@@ -68,7 +73,7 @@ export async function updatePlaylist(id, playlist) {
         date: playlistData.date,
         access: playlistData.access
     }
-    await fetch(`http://localhost:3001/api/playlists/${id}`,
+    await fetch(`http://localhost:3001/api/playlists/${playlist.id}`,
     {
         method: 'PATCH',
         headers: {

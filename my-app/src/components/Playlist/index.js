@@ -2,43 +2,33 @@ import { useLoaderData, useOutletContext } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Track from "../Track";
 import { updatePlaylist } from "../../api";
+import AddSongs from "../AddSongs";
+import SearchSongs from "../SearchSongs";
+import EditSongs from "../EditSongs";
+import { getSpotifyPlaylist, spotify } from "../../spotify";
 
 export async function loader({ params }) {
     console.log("HI", params)
-    const response = await fetch(`http://localhost:3001/api/playlists/${params.playlistId}`)
-    const data = await response.json()
-    const playlist = data.payload[0]
-    return playlist;
+    const response = await getSpotifyPlaylist(params.playlistId)
+    return response;
 }
 
 export default function Playlist() {
-    const [playlist, setPlaylist] = useState([])
-    const context = useOutletContext()
-    console.log("hey", context)
-
     const playlistData = useLoaderData();
-    console.log("HEY", playlistData.tracks)
-    let tracksArr = []
-    for (let i = 0; i < playlistData.tracks.length; i++) {
-        const trackSplit = JSON.stringify(playlistData.tracks).split("\\").filter((el, ind) => ind % 2 !== 0)
-        let tracksObj = {}
-        for (let i = 0; i < trackSplit.length; i++) {
-            tracksObj[trackSplit[i].replace('"', "")] = trackSplit[i + 1].replace('"', "")
-            i++;
-        }
-        tracksArr.push(tracksObj)
-    }
-    const newPlaylist = {...playlistData, tracks: tracksArr}
+    const [playlist, setPlaylist] = useState(playlistData)
+    const [added, setAdded] = useState(false)
 
-    async function deleteFromPlaylist(spotify_id, id) {
-        const newPlaylist = await context.deleteTrack(spotify_id)
-        console.log(newPlaylist)
+    async function updatePlaylistDetails() {
+        const response = await getSpotifyPlaylist(playlist.id)
+        setPlaylist(response) 
     }
 
-    return <>
-        <h1>{newPlaylist.name}</h1>
-        <p>{newPlaylist.description}</p>
-        <div>{newPlaylist.tracks.map(item => <Track image={item.image} name={item.name} artist={item.artist} album={item.album} buttonFunction={() => deleteFromPlaylist()} buttonText="Remove"/>)}</div>
-        
-    </>
+    useEffect(() =>{
+        updatePlaylistDetails()
+    })
+
+    return <div className="add-songs-container">
+            <SearchSongs playlist={playlist}/>
+            <EditSongs playlist={playlist}/>
+    </div>
 }

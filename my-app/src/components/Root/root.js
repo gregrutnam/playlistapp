@@ -1,6 +1,6 @@
 import Header from "../Header"
 import { useEffect, useState } from "react";
-import { loginUrl, getTokenFromUrl, spotify, makeSpotifyPlaylist, addTrackSpotifyPlaylist, deleteTrackSpotify } from "../../spotify";
+import { loginUrl, getTokenFromUrl, spotify, makeSpotifyPlaylist, addTrackSpotifyPlaylist, deleteTrackSpotify, searchTracksSpotify } from "../../spotify";
 import AddSongs from "../AddSongs";
 import { Link } from "react-router-dom";
 import { Outlet } from "react-router-dom"
@@ -13,7 +13,7 @@ export async function loader() {
   }
 
 export default function Root() {
-const [spotifyToken, setSpotifyToken] = useState("");
+const [spotifyToken, setSpotifyToken] = useState(localStorage.getItem('spotifyToken'));
 const [playlist, setPlaylist] = useState();
 const [user, setUser] = useState();
 const [query, setQuery] = useState("");
@@ -29,6 +29,16 @@ const [playlistSettings, setPlaylistSettings] = useState({ name: "", description
 	function playlistName(event) {
 		setPlaylistSettings({...playlistSettings, name: event.target.value});
 	}
+
+	useEffect(() => {
+		if (spotifyToken) {
+			spotify.setAccessToken(spotifyToken)
+			spotify.getMe().then((user) => {
+				setUser(user);
+		});
+		}
+		console.log("user: ", user)
+	}, [])
 
 	/**
 	 * This function takes in user input and sets the "description" state
@@ -89,10 +99,8 @@ const [playlistSettings, setPlaylistSettings] = useState({ name: "", description
 		window.location.hash = "";
 		if (_spotifyToken) {
 			setSpotifyToken(_spotifyToken);
+			localStorage.setItem('spotifyToken', _spotifyToken)
 			spotify.setAccessToken(_spotifyToken);
-			spotify.getMe().then((user) => {
-					setUser(user);
-			});
 		}
 	}, []);
 
@@ -100,9 +108,9 @@ const [playlistSettings, setPlaylistSettings] = useState({ name: "", description
 	 * Creates a playlist on Spotify, then stores the data about this playlist as state, builds a new playlist object with the structure and information needed for the backend and adds this new playlist to the database
 	 */
 	async function makePlaylist() {
-		spotify.setAccessToken(spotifyToken);
 		const playlistVariable = await makeSpotifyPlaylist(user.id, playlistSettings)
 		setPlaylist(playlistVariable)
+		console.log(playlistVariable)
 		const playlistObject = {
 				playlist_id: playlistVariable.id,
 				name: playlistVariable.name,
@@ -119,10 +127,10 @@ const [playlistSettings, setPlaylistSettings] = useState({ name: "", description
 	/**
 	 * This function adds tracks to a playlist on Spotify and then updates the playlist accordingly in the database
 	 */
-	async function addTracks(event) {
-		const result = await addTrackSpotifyPlaylist(event.target.id, playlist.id)
+	async function addTracks(uri, playlistId) {
+		const result = await addTrackSpotifyPlaylist(uri, playlistId)
 		setPlaylist(result)
-		await updatePlaylist(newPlaylist.id, playlist);
+		await updatePlaylist(result);
 	}
 
 	function handleQuery(event) {
@@ -130,8 +138,7 @@ const [playlistSettings, setPlaylistSettings] = useState({ name: "", description
 	}
 
 	async function searchTracks() {
-		const options = { limit: 50 }
-		let result = await spotify.searchTracks(query, options)
+		const result = await searchTracksSpotify(query);
 		setResults(result.tracks.items)
 	}
 
@@ -154,6 +161,29 @@ const [playlistSettings, setPlaylistSettings] = useState({ name: "", description
 			</> :
 					<a href={loginUrl} id="login-button"> Sign in with Spotify! </a>
 			}
-			<Outlet context={{spotifyToken: spotifyToken, playlist: playlist, user: user, results: results, playlistSettings: playlistSettings, playlistName: playlistName, playlistDescription: playlistDescription, playlistSetting: playlistSetting, makePlaylist: makePlaylist, postPlaylist: postPlaylist, addTracks: addTracks, searchTracks: searchTracks, deleteTrack: deleteTrack, handleQuery: handleQuery, playlistAccess: playlistAccess, isValidUser: isValidUser, validateUser: validateUser, playlistAccessUser: playlistAccessUser, getPlaylistAccessInput: getPlaylistAccessInput, playlistAccessInput: playlistAccessInput, resetAccessUser: resetAccessUser, removeAccessUser: removeAccessUser}} />
+			<Outlet context={
+				{
+					spotifyToken: spotifyToken, 
+					playlist: playlist,
+					user: user, 
+					results: results, 
+					isValidUser: isValidUser, 
+					playlistSettings: playlistSettings, 
+					playlistAccessInput: playlistAccessInput, 
+					playlistAccessUser: playlistAccessUser, 
+					playlistName: playlistName, 
+					playlistDescription: playlistDescription, 
+					playlistSetting: playlistSetting, 
+					makePlaylist: makePlaylist, 
+					addTracks: addTracks, 
+					searchTracks: searchTracks, 
+					deleteTrack: deleteTrack, 
+					handleQuery: handleQuery, 
+					playlistAccess: playlistAccess, 
+					validateUser: validateUser, 
+					getPlaylistAccessInput: getPlaylistAccessInput, 
+					resetAccessUser: resetAccessUser, 
+					removeAccessUser: removeAccessUser}
+				} />
 	</div>
 }
