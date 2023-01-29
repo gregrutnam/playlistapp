@@ -15,20 +15,27 @@ export async function loader({ params }) {
 
 export default function Playlist() {
     const playlistData = useLoaderData();
-    const [playlist, setPlaylist] = useState(playlistData)
-    const [added, setAdded] = useState(false)
+    const context = useOutletContext()
+
+    useEffect(() => {
+        context.setPlaylist(playlistData)
+    }, [])
 
     async function updatePlaylistDetails() {
-        const response = await getSpotifyPlaylist(playlist.id)
-        setPlaylist(response) 
+        const response = await getSpotifyPlaylist(playlistData.playlist_id)
+        context.setPlaylist(response) 
     }
+
+    useEffect(() => {
+        console.log(context.playlist)
+    }, [context.playlist])
 
     useEffect(() =>{
         updatePlaylistDetails()
-    })
+    }, [])
 
     return <div className="add-songs-container">
-            <SearchSongs playlist={playlist}/>
-            <EditSongs playlist={playlist}/>
+            <SearchSongs playlist={context.playlist}/>
+            <EditSongs playlist={context.playlist}/>
     </div>
 }

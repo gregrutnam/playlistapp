@@ -7,15 +7,13 @@ export async function getPlaylists() {
     return data.payload;
 }
 
-/** Get playlist by id (integer) from database 
- * @param id integer
+/** Get playlist by id string from database 
+ * @param id string
  * @return The playlist
 */
 export async function getPlaylistById(id){
-    console.log(id)
     const response = await fetch(`http://localhost:3001/api/playlists/${id}`)
     const data = await response.json()
-    console.log("helllooooo", data)
     return data.payload
 }
 
@@ -24,33 +22,25 @@ export async function getPlaylistById(id){
  * @return The newly added playlist
  */
 export async function postPlaylist(playlist) {
-    const playlistObject = {
-        playlist_id: playlist.playlist_id,
-        name: playlist.name,
-        link: playlist.link,
-        created_by: playlist.created_by,
-        tracks: playlist.tracks,
-        date: playlist.date,
-        access: playlist.access
-      }
+    console.log("hi!", playlist)
     const response = await fetch('http://localhost:3001/api/playlists',
     {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(playlistObject)
+        body: JSON.stringify(playlist)
     })
     const data = await response.json()
     return data.payload;
 }
 
 /** Update an existing playlist in the database
- * @param id integer
- * @param playlist playlist_id: string, name: string, link: string, created_by: string, tracks: string[], date: string, access: string[]ß
+ * @param playlist
  */
 export async function updatePlaylist(playlist) {
     const playlistData = await getPlaylistById(playlist.id);
+    console.log(playlist.id)
     const tracksArr = [...playlist.tracks.items.map(item => {
         const trackObj = {
             id: item.track.id,
@@ -67,6 +57,8 @@ export async function updatePlaylist(playlist) {
     const playlistObj = {
         playlist_id: playlistData.playlist_id,
         name: playlistData.name,
+        description: playlistData.description,
+        image: playlist.images[0].url,
         link: playlistData.link,
         created_by: playlistData.created_by,
         tracks: tracksArr,
