@@ -101,3 +101,31 @@ export async function searchTracksSpotify(query){
     let result = await spotify.searchTracks(query, options)
     return result;
 }
+
+/** Changes the details of a playlist
+ * @param id string
+ * @param data object {name: string, description: string, public: boolean}
+ */
+export async function updateSpotifyPlaylistDetails(id, data){
+    console.log(data)
+    const dataObj = {}
+    for (const property in data) {
+        if (data[property]) {
+            dataObj[property] = data[property]
+        }
+    }
+    spotify.setAccessToken(localStorage.getItem('spotifyToken'));
+    console.log(dataObj)
+    await spotify.changePlaylistDetails(id, dataObj)
+    const result = await spotify.getPlaylist(id)
+    return result;
+}
+
+/** Change the image associated with a Spotify playlist
+ * @param id The id of the playlist
+ * @param image Base64 encoded JPEG image data, maximum payload size is 256 KB.
+ */
+export async function updateSpotifyImage(id, image){
+    spotify.setAccessToken(localStorage.getItem('spotifyToken'));
+    spotify.uploadCustomPlaylistCoverImage(id, image)
+}

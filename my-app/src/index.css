@@ -157,6 +157,18 @@ nav {
   font-size: 15px;
 }
 
+.add-songs-details {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 400px;
+}
+
+.add-songs-main-info {
+  display: flex;
+  width: 400px;
+  justify-content: center;
+}
 
 .add-songs-tracks {
   height: 240px;
@@ -200,4 +212,16 @@ nav {
 .added-access-user > p:hover {
   color: lightgray;
   cursor: pointer;
+}
+
+.edit-button-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.edit-container { 
+  display: flex;
+  flex-direction: column;
+  width: 300px;
 }

@@ -39,6 +39,7 @@ export async function postPlaylist(playlist) {
  * @param playlist
  */
 export async function updatePlaylist(playlist) {
+    console.log("HI")
     const playlistData = await getPlaylistById(playlist.id);
     console.log(playlist.id)
     const tracksArr = [...playlist.tracks.items.map(item => {
@@ -54,17 +55,25 @@ export async function updatePlaylist(playlist) {
         }
         return trackObj
     })]
+    let playlistImage = ""
+    if (playlist.images.length > 0) {
+        playlistImage = playlist.images[0].url
+    }
+    else {
+        playlistImage = "/images/cyber-mix-default-image.png"
+    }
     const playlistObj = {
-        playlist_id: playlistData.playlist_id,
-        name: playlistData.name,
-        description: playlistData.description,
-        image: playlist.images[0].url,
+        playlist_id: playlist.id,
+        name: playlist.name,
+        description: playlist.description,
+        image: playlistImage,
         link: playlistData.link,
         created_by: playlistData.created_by,
         tracks: tracksArr,
         date: playlistData.date,
         access: playlistData.access
     }
+    console.log(playlistObj)
     await fetch(`http://localhost:3001/api/playlists/${playlist.id}`,
     {
         method: 'PATCH',

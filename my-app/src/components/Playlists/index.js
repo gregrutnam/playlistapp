@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid';
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useOutletContext, useLoaderData } from "react-router-dom";
@@ -5,7 +6,8 @@ import { useOutletContext, useLoaderData } from "react-router-dom";
 export default function Playlists(){
   // const { playlistResults } = useLoaderData();
   const context = useOutletContext();
-
+  console.log(context)
+  
   const spotifyToken = context.spotifyToken
     const [user, setUser] = useState()
 
@@ -26,7 +28,7 @@ export default function Playlists(){
         <h1>My mixes</h1>
         <div className="playlists-container">
           {context.playlists ? context.playlists.map(el => 
-            <div className="playlist">
+            <div className="playlist" key={uuidv4()}>
                 <div className="playlist-name-button">
                   <h4>{el.name}</h4> 
                   <Link to={`${el.playlist_id}`}><button>Edit</button></Link>

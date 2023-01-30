@@ -1,6 +1,6 @@
 import { useOutletContext } from "react-router-dom";
 import AddSongs from "../AddSongs";
-import EditSongs from "../EditSongs";
+import Edit from "../Edit";
 import SearchSongs from "../SearchSongs";
 
 export default function AddSongsPage() {
@@ -9,6 +9,6 @@ export default function AddSongsPage() {
 
     return playlist ? <div className="add-songs-container">
         <SearchSongs playlist={playlist}/>
-        <EditSongs playlist={playlist}/>
+        <Edit playlist={playlist}/>
     </div> : <h1>Make a new playlist or update an existing one from the "My mixes" page.</h1>
 }
