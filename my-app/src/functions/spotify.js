@@ -107,16 +107,8 @@ export async function searchTracksSpotify(query){
  * @param data object {name: string, description: string, public: boolean}
  */
 export async function updateSpotifyPlaylistDetails(id, data){
-    console.log(data)
-    const dataObj = {}
-    for (const property in data) {
-        if (data[property]) {
-            dataObj[property] = data[property]
-        }
-    }
     spotify.setAccessToken(localStorage.getItem('spotifyToken'));
-    console.log(dataObj)
-    await spotify.changePlaylistDetails(id, dataObj)
+    await spotify.changePlaylistDetails(id, data)
     const result = await spotify.getPlaylist(id)
     return result;
 }
