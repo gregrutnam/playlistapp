@@ -2,7 +2,7 @@ import SpotifyWebApi from "spotify-web-api-js";
 
 export const authEndpoint = "https://accounts.spotify.com/authorize";
 
-const redirectUri = "http://localhost:3000/callback"
+const redirectUri = "https://playlistapp-nine.vercel.app/callback"
 
 const clientId = "593d7fe3d674485392669714b0241c96"
 

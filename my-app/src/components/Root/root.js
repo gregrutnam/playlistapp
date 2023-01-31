@@ -5,7 +5,7 @@ import { Outlet, useLoaderData } from "react-router-dom"
 import { getPlaylists, postPlaylist, updatePlaylist } from "../../functions/api";
 
 export async function loader() {
-	const response = await fetch("http://localhost:3001/api/playlists");
+	const response = await fetch("https://cybermix-backend.onrender.com//api/playlists");
 	const playlistResults = await response.json()
 	return playlistResults.payload;
 }
