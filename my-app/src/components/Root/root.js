@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { loginUrl, getTokenFromUrl, spotify, makeSpotifyPlaylist, addTrackSpotifyPlaylist, deleteTrackSpotify, searchTracksSpotify, updateSpotifyPlaylistDetails } from "../../functions/spotify";
 import { Outlet, useLoaderData } from "react-router-dom"
 import { getPlaylists, postPlaylist, updatePlaylist } from "../../functions/api";
+import {ClipLoader} from "react-spinners";
 
 export async function loader() {
 	const response = await fetch("https://cybermix-backend.onrender.com/api/playlists");
@@ -12,7 +13,8 @@ export async function loader() {
 
 export default function Root() {
 	const playlistResults = useLoaderData()
-
+	
+	const [loading, setLoading] = useState(true)
 	const [spotifyToken, setSpotifyToken] = useState(localStorage.getItem('spotifyToken'));
 	const [playlist, setPlaylist] = useState();
 	const [playlists, setPlaylists] = useState(playlistResults)
@@ -24,6 +26,12 @@ export default function Root() {
 	const [playlistAccessUser, setPlaylistAccessUser] = useState()
 	const [newPlaylist, setNewPlaylist] = useState([])
 	const [playlistSettings, setPlaylistSettings] = useState({ name: "", description: "", settings: false, access: [] })
+
+	useEffect(() => {
+		if (playlists) {
+			setLoading(false)
+		}
+	}, [playlists])
 
 	useEffect(() => {
 		/**
@@ -182,7 +190,18 @@ export default function Root() {
 		setPlaylist(updatedPlaylist)
 	}
 
+	useEffect(() => {
+        console.log("loading", loading)
+      }, [loading])
+
 	return <div className="root-container">
+		<ClipLoader
+            color="black"
+            loading={loading}
+            size={150}
+            aria-label="Loading Spinner"
+            data-testid="loader"
+		      /> 
 		<img src="/images/cyber-mix-default-image.png" className="header-image"></img>
 		{user ? <>
 			<Header />

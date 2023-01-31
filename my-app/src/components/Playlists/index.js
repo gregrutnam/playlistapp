@@ -2,22 +2,29 @@ import { v4 as uuidv4 } from 'uuid';
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useOutletContext, useLoaderData } from "react-router-dom";
+import { ClipLoader } from 'react-spinners';
 
 export default function Playlists(){
-  // const { playlistResults } = useLoaderData();
   const context = useOutletContext();
   console.log(context)
   
   const spotifyToken = context.spotifyToken
     const [user, setUser] = useState()
+    const [loading, setLoading] = useState(true)
 
       useEffect(() => {
         context.getAllPlaylists()
       }, [])
 
       useEffect(() => {
-        console.log("playlists", context.playlists)
+        if (context.playlists) {
+          setLoading(false)
+        }
       }, [context.playlists])
+
+      useEffect(() => {
+        console.log(loading)
+      }, [loading])
 
 
       useEffect(() => {
@@ -27,6 +34,13 @@ export default function Playlists(){
   return spotifyToken ? <>
         <h1>My mixes</h1>
         <div className="playlists-container">
+          <ClipLoader
+            color="black"
+            loading={loading}
+            size={150}
+            aria-label="Loading Spinner"
+            data-testid="loader"
+		      />
           {context.playlists ? context.playlists.map(el => 
             <div className="playlist" key={uuidv4()}>
                 <div className="playlist-name-button">
