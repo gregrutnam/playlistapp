@@ -41,7 +41,7 @@ export default function Access() {
     return <div>{context.isValidUser ? null : <Message />}
         {context.playlistAccessUser ? <DisplayUser /> : null}
         {context.playlistSettings.access.length > 0 ? <DisplayAddedUsers /> : null}
-        <input onBlur={() => context.getPlaylistAccessInput()} placeholder="Enter a spotify username"></input>
+        <input onBlur={context.getPlaylistAccessInput} placeholder="Enter a spotify username"></input>
         <button onClick={() => { context.setPlaylistAccessUser(); context.validateUser();}}>Search</button>
     </div>
 }

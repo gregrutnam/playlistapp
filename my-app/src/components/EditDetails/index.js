@@ -46,8 +46,8 @@ export default function EditDetails(){
                 : null}
                 {editing ? <EditImage/> : <div className="edit-button-container">
                     {playlist.images.length > 0 ?
-                    <img src={playlist.images[0].url}></img>
-                    : <img src="/images/cyber-mix-default-image.png"></img>}
+                    <img src={playlist.images[0].url} className="header-image"></img>
+                    : <img src="/images/cyber-mix-default-image.png" className="header-image"></img>}
                     <button onClick={() => setEditing(true)}>Edit</button>
             </div>}
             {/* <input onBlur={context.playlistDescription}></input> */}

@@ -2,7 +2,7 @@
  * @return An array of playlists
  */
 export async function getPlaylists() {
-    const response = await fetch('http://localhost:3001/api/playlists')
+    const response = await fetch('https://cybermix-backend.onrender.com/api/playlists')
     const data = await response.json();
     return data.payload;
 }
@@ -12,7 +12,7 @@ export async function getPlaylists() {
  * @return The playlist
 */
 export async function getPlaylistById(id){
-    const response = await fetch(`http://localhost:3001/api/playlists/${id}`)
+    const response = await fetch(`https://cybermix-backend.onrender.com/api/playlists/${id}`)
     const data = await response.json()
     return data.payload
 }
@@ -23,7 +23,7 @@ export async function getPlaylistById(id){
  */
 export async function postPlaylist(playlist) {
     console.log("hi!", playlist)
-    const response = await fetch('http://localhost:3001/api/playlists',
+    const response = await fetch('https://cybermix-backend.onrender.com/api/playlists',
     {
         method: 'POST',
         headers: {
@@ -74,7 +74,7 @@ export async function updatePlaylist(playlist) {
         access: playlistData.access
     }
     console.log(playlistObj)
-    await fetch(`http://localhost:3001/api/playlists/${playlist.id}`,
+    await fetch(`https://cybermix-backend.onrender.com/api/playlists/${playlist.id}`,
     {
         method: 'PATCH',
         headers: {

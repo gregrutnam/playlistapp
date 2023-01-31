@@ -183,7 +183,7 @@ export default function Root() {
 	}
 
 	return <div className="root-container">
-		<img src="/images/cyber-mix-default-image.png"></img>
+		<img src="/images/cyber-mix-default-image.png" className="header-image"></img>
 		{user ? <>
 			<Header />
 			<p>Logged in as {user.display_name}</p>
