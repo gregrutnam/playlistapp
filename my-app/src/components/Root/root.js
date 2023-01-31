@@ -28,7 +28,7 @@ export default function Root() {
 	const [playlistSettings, setPlaylistSettings] = useState({ name: "", description: "", settings: false, access: [] })
 
 	useEffect(() => {
-		if (playlists) {
+		if (playlistResults) {
 			setLoading(false)
 		}
 	}, [playlists])
