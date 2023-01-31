@@ -123,3 +123,7 @@ export async function updateSpotifyImage(id, image){
     spotify.setAccessToken(localStorage.getItem('spotifyToken'));
     spotify.uploadCustomPlaylistCoverImage(id, image)
 }
+
+export async function getCurrentUser(){
+    return await spotify.getMe()
+} 

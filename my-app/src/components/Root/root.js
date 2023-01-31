@@ -5,19 +5,9 @@ import { Outlet, useLoaderData } from "react-router-dom"
 import { getPlaylists, postPlaylist, updatePlaylist } from "../../functions/api";
 import {ClipLoader} from "react-spinners";
 
-export async function loader() {
-	const response = await fetch("https://cybermix-backend.onrender.com/api/playlists");
-	const playlistResults = await response.json()
-	return playlistResults.payload;
-}
-
 export default function Root() {
-	const playlistResults = useLoaderData()
-	
-	const [loading, setLoading] = useState(true)
 	const [spotifyToken, setSpotifyToken] = useState(localStorage.getItem('spotifyToken'));
 	const [playlist, setPlaylist] = useState();
-	const [playlists, setPlaylists] = useState(playlistResults)
 	const [user, setUser] = useState();
 	const [query, setQuery] = useState("");
 	const [results, setResults] = useState([])
@@ -26,12 +16,6 @@ export default function Root() {
 	const [playlistAccessUser, setPlaylistAccessUser] = useState()
 	const [newPlaylist, setNewPlaylist] = useState([])
 	const [playlistSettings, setPlaylistSettings] = useState({ name: "", description: "", settings: false, access: [] })
-
-	useEffect(() => {
-		if (playlistResults) {
-			setLoading(false)
-		}
-	}, [playlistResults])
 
 	useEffect(() => {
 		/**
@@ -60,14 +44,6 @@ export default function Root() {
 			});
 		}
 	}, [])
-
-	/** Function to retrieve all playlists from the database that belong to the user or that they have been given access to by another user */
-	async function getAllPlaylists() {
-		const playlistArr = await getPlaylists()
-		const userData = await spotify.getMe()
-		const allPlaylists = playlistArr.filter(item => item.access.includes(userData.id))
-		setPlaylists(allPlaylists)
-	}
 
 	/**
 	 * This function takes in user input and sets the "name" state
@@ -190,18 +166,14 @@ export default function Root() {
 		setPlaylist(updatedPlaylist)
 	}
 
-	useEffect(() => {
-        console.log("loading", loading)
-      }, [loading])
-
 	return <div className="root-container">
-		<ClipLoader
+		{/* <ClipLoader
             color="black"
             loading={loading}
             size={150}
             aria-label="Loading Spinner"
             data-testid="loader"
-		      /> 
+		      />  */}
 		<img src="/images/cyber-mix-default-image.png" className="header-image"></img>
 		{user ? <>
 			<Header />
@@ -213,7 +185,6 @@ export default function Root() {
 			{
 				spotifyToken: spotifyToken,
 				playlist: playlist,
-				playlists: playlists,
 				user: user,
 				results: results,
 				isValidUser: isValidUser,
@@ -234,7 +205,6 @@ export default function Root() {
 				getPlaylistAccessInput: getPlaylistAccessInput,
 				setPlaylistAccessUser: setPlaylistAccessUser,
 				removeAccessUser: removeAccessUser,
-				getAllPlaylists: getAllPlaylists,
 				updatePlaylistDetails: updatePlaylistDetails
 			}
 		} />

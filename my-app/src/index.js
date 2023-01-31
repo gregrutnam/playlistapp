@@ -5,7 +5,8 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
 import MakePlaylist from './components/MakePlaylist';
 import Playlists from './components/Playlists';
-import Root, { loader as rootLoader } from './components/Root/root';
+import Root from './components/Root/root';
+import { loader as playlistsLoader } from './components/Playlists'
 import About from './components/About';
 import Playlist, {loader as playlistLoader} from './components/Playlist';
 import AddSongsPage from './components/AddSongsPage';
@@ -16,7 +17,6 @@ const router = createBrowserRouter([
     {
       path: "/",
       element: <Root />,
-      loader: rootLoader,
       children: [
         {
           path: "about",
@@ -25,6 +25,7 @@ const router = createBrowserRouter([
         {
           path: "playlists",
           element: <Playlists />,
+          loader: playlistsLoader,
         },
         {
           path: "playlists/:playlistId",
@@ -56,6 +57,7 @@ const router = createBrowserRouter([
         {
           path: "playlists",
           element: <Playlists />,
+          loader: playlistsLoader,
         },
         {
           path: "playlists/:playlistId",
