@@ -31,7 +31,7 @@ export default function Root() {
 		if (playlistResults) {
 			setLoading(false)
 		}
-	}, [playlists])
+	}, [playlistResults])
 
 	useEffect(() => {
 		/**
